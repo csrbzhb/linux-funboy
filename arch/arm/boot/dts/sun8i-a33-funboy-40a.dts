@@ -94,3 +94,8 @@
 		remote-endpoint = <&panel_input>;
 	};
 };
+&mmc0 {
+        /delete-property/ cd-gpios;
+        pinctrl-names = "default";
+        pinctrl-0 = <&mmc0_pins_a>;
+};
