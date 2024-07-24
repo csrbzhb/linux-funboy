@@ -342,13 +342,13 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
 	drm_panel_init(&panel->base);
 	panel->base.dev = dev;
 	panel->base.funcs = &panel_simple_funcs;
-
+	dev_err(dev, "drm_panel_init  OK%d\n");
 	err = drm_panel_add(&panel->base);
 	if (err < 0)
 		goto free_ddc;
 
 	dev_set_drvdata(dev, panel);
-
+	dev_err(dev, "panel_simple_probe OK\n");
 	return 0;
 
 free_ddc:
@@ -357,7 +357,7 @@ free_ddc:
 free_backlight:
 	if (panel->backlight)
 		put_device(&panel->backlight->dev);
-
+	dev_err(dev, "panel_simple_probe ERROR\n");
 	return err;
 }
 

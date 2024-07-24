@@ -54,7 +54,8 @@
 		compatible = "edt,et070080dh6";
 		#address-cells = <1>;
 		#size-cells = <0>;
-
+		power-supply = <&reg_vcc5v0>;
+		backlight = <&backlight>;
 		port@0 {
 			reg = <0>;
 			#address-cells = <1>;
@@ -66,6 +67,15 @@
 			};
 		};
 	};
+	
+	bat: battery {
+		compatible = "simple-battery";
+		constant_charge_current_max_microamp = <400000>;
+	};
+};
+
+&backlight{
+	enable-gpios = <&pio 7 1 GPIO_ACTIVE_HIGH>; /* PH1 A0 B1 C2 D3 E4 F5 G6 H7*/
 };
 
 &uart0 {
@@ -80,6 +90,7 @@
 
 &simplefb_lcd{
 	status = "okay";
+	vcc-lcd-supply = <&reg_vcc5v0>;
 };
 
 &tcon0 {
@@ -94,8 +105,51 @@
 		remote-endpoint = <&panel_input>;
 	};
 };
+
+&codec {
+	allwinner,audio-routing =
+		"Headphone", "HP",
+		"Headphone", "HPCOM",
+		"MIC1", "Mic",
+		"Mic",  "HBIAS";
+	status = "okay";
+};
+
+&codec_analog {
+	status = "okay";
+};
 &mmc0 {
-        /delete-property/ cd-gpios;
-        pinctrl-names = "default";
-        pinctrl-0 = <&mmc0_pins_a>;
+	/delete-property/ cd-gpios;
+	/delete-property/ cd-inverted;
+	pinctrl-names = "default";
+	pinctrl-0 = <&mmc0_pins_a>;
+	vmmc-supply = <&reg_vcc3v3>;
+	vqmmc-supply = <&reg_vcc3v3>;
+	broken-cd;
+};
+
+&ac_power_supply{
+	status="okay";
+};
+
+&battery_power_supply{
+	status="okay";
+};
+&usb_power_supply{
+	status="okay";
+};
+
+&reg_vcc3v0 {
+	regulator-always-on;
+	status = "okay";
+};
+
+&reg_vcc3v3 {
+	regulator-always-on;
+	status = "okay";
+};
+
+&reg_vcc5v0 {
+	regulator-always-on;
+	status = "okay";
 };
