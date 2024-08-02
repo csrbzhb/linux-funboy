@@ -50,23 +50,14 @@
 	aliases {
 		serial0 = &uart0;
 	};
-	panel {
-		compatible = "edt,et070080dh6";
-		#address-cells = <1>;
-		#size-cells = <0>;
-		power-supply = <&reg_vcc5v0>;
-		backlight = <&backlight>;
-		port@0 {
-			reg = <0>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			panel_input: endpoint@0 {
-				reg = <0>;
-				remote-endpoint = <&tcon0_out_panel>;
-			};
-		};
-	};
+        st7701s {
+	        compatible = "spi_st7701s";
+        	cs-gpios = <&pio 6 10 GPIO_ACTIVE_HIGH>; //PG 10
+	        clk-gpios = <&pio 6 7 GPIO_ACTIVE_HIGH>;  //PG7
+        	data-gpios = <&pio 6 6 GPIO_ACTIVE_HIGH>;  //PG6
+	        reset-gpios = <&pio 7 1 GPIO_ACTIVE_HIGH>; /* PH1 */
+        	status = "okay";
+        };
 	
 	bat: battery {
 		compatible = "simple-battery";
@@ -75,7 +66,12 @@
 };
 
 &backlight{
-	enable-gpios = <&pio 7 1 GPIO_ACTIVE_HIGH>; /* PH1 A0 B1 C2 D3 E4 F5 G6 H7*/
+//	enable-gpios = <&pio 7 1 GPIO_ACTIVE_HIGH>; /* PH1 A0 B1 C2 D3 E4 F5 G6 H7*/
+	/delete-property/ enable-gpios;
+};
+
+&i2c0 {
+	/delete-node/ touchscreen@0;
 };
 
 &uart0 {
@@ -84,26 +80,13 @@
 	status = "okay";
 };
 
+&simplefb_lcd{
+       status = "okay";
+       vcc-lcd-supply = <&reg_vcc5v0>;
+};
+
 &r_uart {
 	status = "disabled";
-};
-
-&simplefb_lcd{
-	status = "okay";
-	vcc-lcd-supply = <&reg_vcc5v0>;
-};
-
-&tcon0 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&lcd_rgb666_pins>;
-	status = "okay";
-};
-
-&tcon0_out {
-	tcon0_out_panel: endpoint@0 {
-		reg = <0>;
-		remote-endpoint = <&panel_input>;
-	};
 };
 
 &codec {
