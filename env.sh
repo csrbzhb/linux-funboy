@@ -1,1 +1,1 @@
-export CROSS_COMPILE=/home/linaro/code/FunKey-OS/SDK/output/host/bin/arm-linux-
+export CROSS_COMPILE=/home/rubin/code/FunKey-OS/SDK/output/host/bin/arm-linux-

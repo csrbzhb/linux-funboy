@@ -63,6 +63,17 @@
 		compatible = "simple-battery";
 		constant_charge_current_max_microamp = <400000>;
 	};
+	soc@01c00000 {
+		/delete-node/ gpu@1c40000;
+	};
+	thermal-zones {
+		cpu_thermal {
+			cooling-maps {
+				/delete-node/ map2;
+				/delete-node/ map3;
+			};
+		};
+	};
 };
 
 &backlight{
